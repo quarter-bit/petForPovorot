@@ -1,0 +1,398 @@
+basePath: /
+definitions:
+  models.Category:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.Order:
+    properties:
+      complete:
+        type: boolean
+      id:
+        type: integer
+      petId:
+        type: integer
+      quantity:
+        type: integer
+      shipDate:
+        type: string
+      status:
+        type: string
+    type: object
+  models.Pet:
+    properties:
+      category:
+        $ref: '#/definitions/models.Category'
+      id:
+        type: integer
+      name:
+        type: string
+      photoUrls:
+        items:
+          type: string
+        type: array
+      status:
+        type: string
+      tags:
+        items:
+          $ref: '#/definitions/models.Tag'
+        type: array
+    type: object
+  models.Tag:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.User:
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: integer
+      lastName:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      userStatus:
+        type: integer
+      username:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Pet Store from KataAcademy
+  title: Pet Store
+  version: "1.0"
+paths:
+  /pet:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Pet
+        in: body
+        name: pet
+        required: true
+        schema:
+          $ref: '#/definitions/models.Pet'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Add pet
+      tags:
+      - Pet
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Pet
+        in: body
+        name: pet
+        required: true
+        schema:
+          $ref: '#/definitions/models.Pet'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Update pet by JSON
+      tags:
+      - Pet
+  /pet/{petId}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Delete pet by ID
+      tags:
+      - Pet
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Find pet by ID
+      tags:
+      - Pet
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Name
+        in: query
+        name: name
+        type: string
+      - description: Status
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Update pet by form
+      tags:
+      - Pet
+  /pet/findByStatus:
+    get:
+      consumes:
+      - application/json
+      deprecated: true
+      parameters:
+      - description: Status
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Find pets by status
+      tags:
+      - Pet
+  /store/inventory:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Pet'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: Inventory
+      tags:
+      - Store
+  /store/order:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Order
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/models.Order'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Order'
+      summary: Create order
+      tags:
+      - Store
+  /store/order/{orderId}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Order id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete order by id
+      tags:
+      - Store
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Order id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Order'
+      summary: Get order by id
+      tags:
+      - Store
+  /user:
+    post:
+      consumes:
+      - application/json
+      description: Create User
+      parameters:
+      - description: User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Create User
+      tags:
+      - user
+  /user/{username}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete User
+      parameters:
+      - description: ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete User
+      tags:
+      - user
+    get:
+      consumes:
+      - application/json
+      description: Get User By Username
+      parameters:
+      - description: username
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Get User By Username
+      tags:
+      - user
+    put:
+      consumes:
+      - application/json
+      description: Update User
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update User
+      tags:
+      - user
+  /user/createWithArray:
+    post:
+      consumes:
+      - application/json
+      description: Create User
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Create User With Given Input Array
+      tags:
+      - user
+  /user/login:
+    get:
+      consumes:
+      - application/json
+      description: Login User
+      parameters:
+      - description: username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: password
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User logged in successfully
+          schema:
+            type: string
+      summary: Login User
+      tags:
+      - user
+  /user/logout:
+    get:
+      consumes:
+      - application/json
+      description: Logout User
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: logout
+          schema:
+            type: string
+      summary: Logout User
+      tags:
+      - user
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
