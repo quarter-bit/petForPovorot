@@ -33,7 +33,7 @@ func InitAllRouts(app *app.App) *chi.Mux {
 	r.Get("/user/logout", app.UH.Logout())
 
 	r.Group(func(r chi.Router) {
-		r.Post("/pet/", app.PH.Add())
+		r.Post("/pet", app.PH.Add())
 		r.Put("/pet/", app.PH.FullUpdate())
 		r.Get("/pet/findByStatus", app.PH.GetByStatus())
 		r.Get("/pet/{petId}", app.PH.GetById())

@@ -123,10 +123,10 @@ const docTemplate = `{
                 "summary": "Find pet by ID",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "ID",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -150,10 +150,10 @@ const docTemplate = `{
                 "summary": "Update pet by form",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "ID",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     },
                     {
@@ -189,10 +189,10 @@ const docTemplate = `{
                 "summary": "Delete pet by ID",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "ID",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -276,10 +276,10 @@ const docTemplate = `{
                 "summary": "Get order by id",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "Order id",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -305,10 +305,10 @@ const docTemplate = `{
                 "summary": "Delete order by id",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "Order id",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],

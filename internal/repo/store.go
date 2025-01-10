@@ -22,19 +22,21 @@ func Finder(db *sql.DB, id int) (models.Pet, error) {
 		return models.Pet{}, err
 	}
 
-	err = db.QueryRow("SELECT id, name FROM pets_categories WHERE id = $1", pet.ID).Scan(&pet.Category.ID, &pet.Category.Name)
+	err = db.QueryRow("SELECT id, name FROM pet_categories WHERE id = $1", pet.ID).Scan(&pet.Category.ID, &pet.Category.Name)
 	if err != nil {
 		return models.Pet{}, err
 	}
-
-	err = db.QueryRow("SELECT * FROM pets_tags WHERE pet_id = $1", pet.ID).Scan(&pet.Tags)
-	if err != nil {
-		return models.Pet{}, err
+	for i := range pet.Tags {
+		err = db.QueryRow("SELECT id, name FROM pets_tags WHERE id = $1", pet.ID).Scan(&pet.Tags[i].ID, &pet.Tags[i].Name)
+		if err != nil {
+			return models.Pet{}, err
+		}
 	}
-
-	err = db.QueryRow("SELECT * FROM pets_foto_urls WHERE id = $1", pet.ID).Scan(&pet.PhotoUrls)
-	if err != nil {
-		return models.Pet{}, err
+	for i := range pet.PhotoUrls {
+		err = db.QueryRow("SELECT * FROM pets_foto_urls WHERE id = $1", pet.ID).Scan(&pet.PhotoUrls[i])
+		if err != nil {
+			return models.Pet{}, err
+		}
 	}
 
 	return pet, nil

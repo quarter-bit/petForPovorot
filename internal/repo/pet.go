@@ -21,7 +21,7 @@ func (r *PetRepo) AddPet(pet models.Pet) error {
 		return err
 	}
 	for _, tag := range pet.Tags {
-		_, err = r.db.Exec("INSERT INTO pets_tags (pet_id, tag_id) VALUES ($1, $2)", tag.ID, tag.Name)
+		_, err = r.db.Exec("INSERT INTO pets_tags (id, name) VALUES ($1, $2)", tag.ID, tag.Name)
 		if err != nil {
 			return err
 		}
@@ -32,7 +32,7 @@ func (r *PetRepo) AddPet(pet models.Pet) error {
 			return err
 		}
 	}
-	_, err = r.db.Exec("INSERT INTO pets_categories (id, name) VALUES ($1, $2)", pet.Category.ID, pet.Category.Name)
+	_, err = r.db.Exec("INSERT INTO pet_categories (id, name) VALUES ($1, $2)", pet.Category.ID, pet.Category.Name)
 	return err
 }
 
@@ -42,7 +42,7 @@ func (r *PetRepo) UpdatePetByFullStruct(pet models.Pet) error {
 		return err
 	}
 
-	_, err = r.db.Exec("DELETE FROM pets_tags WHERE pet_id = $1", pet.ID)
+	_, err = r.db.Exec("DELETE FROM pets_tags WHERE id = $1", pet.ID)
 	if err != nil {
 		return err
 	}
@@ -54,7 +54,7 @@ func (r *PetRepo) UpdatePetByFullStruct(pet models.Pet) error {
 		}
 	}
 
-	_, err = r.db.Exec("DELETE FROM pets_foto_urls WHERE pet_id = $1", pet.ID)
+	_, err = r.db.Exec("DELETE FROM pets_foto_urls WHERE id = $1", pet.ID)
 	if err != nil {
 		return err
 	}
@@ -66,7 +66,7 @@ func (r *PetRepo) UpdatePetByFullStruct(pet models.Pet) error {
 		}
 	}
 
-	_, err = r.db.Exec("UPDATE pets_categories SET name = $1 WHERE id = $2", pet.Category.Name, pet.Category.ID)
+	_, err = r.db.Exec("UPDATE pet_categories SET name = $1 WHERE id = $2", pet.Category.Name, pet.Category.ID)
 	if err != nil {
 		return err
 	}
@@ -82,7 +82,7 @@ func (r *PetRepo) FindPetByStatus(status string) (models.Pet, error) {
 		return models.Pet{}, err
 	}
 
-	err = r.db.QueryRow("SELECT id, name FROM pets_categories WHERE id = $1", pet.ID).Scan(&pet.Category.ID, &pet.Category.Name)
+	err = r.db.QueryRow("SELECT id, name FROM pet_categories WHERE id = $1", pet.ID).Scan(&pet.Category.ID, &pet.Category.Name)
 	if err != nil {
 		return models.Pet{}, err
 	}
@@ -155,17 +155,17 @@ func (r *PetRepo) DeletePetById(id int) error {
 		return err
 	}
 
-	_, err = r.db.Exec("DELETE FROM pets_categories WHERE id = $1", id)
+	_, err = r.db.Exec("DELETE FROM pet_categories WHERE id = $1", id)
 	if err != nil {
 		return err
 	}
 
-	_, err = r.db.Exec("DELETE FROM pets_tags WHERE pet_id = S1", id)
+	_, err = r.db.Exec("DELETE FROM pets_tags WHERE id = $1", id)
 	if err != nil {
 		return err
 	}
 
-	_, err = r.db.Exec("DELETE FROM pets_foto_urls WHERE id = S1", id)
+	_, err = r.db.Exec("DELETE FROM pets_foto_urls WHERE id = $1", id)
 	if err != nil {
 		return err
 	}

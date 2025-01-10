@@ -1,10 +1,12 @@
 package app
 
 import (
-	"Pet_store/internal/controller/db"
+	DB "Pet_store/internal/controller/db"
 	"Pet_store/internal/controller/handlers"
 	"Pet_store/internal/repo"
 	"Pet_store/internal/service"
+
+	"log"
 )
 
 type App struct {
@@ -14,9 +16,16 @@ type App struct {
 }
 
 func Inject() *App {
-	db, err := db.Connect()
+	log.Println("DB connecting...")
+	db, err := DB.Connect()
 	if err != nil {
-		panic(err)
+		log.Println("DB connecting error", err)
+		log.Println("DB connecting again...")
+
+		for err != nil {
+			db, err = DB.Connect()
+		}
+		log.Println("DB connected")
 	}
 
 	//Иньекция юзера

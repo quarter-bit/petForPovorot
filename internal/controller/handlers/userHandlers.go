@@ -45,18 +45,18 @@ func (h *UserHandlers) Login( /*username, password string*/ ) http.HandlerFunc {
 		password := r.URL.Query().Get("password")
 
 		dbUser, err := h.Service.GetByName(username)
-		log.Println(dbUser)
 		if err != nil {
-			log.Fatal(err)
+			log.Println("User not found: ", err, "\n", username)
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
 
 		if password != dbUser.Password {
-			log.Fatal("invalid password")
+			log.Println("invalid password")
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
+		log.Println("User logged in: ", username)
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("User logged in successfully\n"))
 		token, _ := controller.GenerateJWToken(username)
@@ -75,6 +75,7 @@ func (h *UserHandlers) Login( /*username, password string*/ ) http.HandlerFunc {
 // @Success 200 {string} string "logout"
 func (h *UserHandlers) Logout() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		log.Println("User logged out")
 		w.Header().Set("Content-Type", "text")
 		w.Write([]byte("logout"))
 	}
@@ -93,9 +94,11 @@ func (h *UserHandlers) GetByUsername() http.HandlerFunc {
 		name := r.URL.Query().Get("name")
 		user, err := h.Service.GetByName(name)
 		if err != nil {
+			log.Println("User not found: ", err, "\n", name)
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
+		log.Println("User found: ", user)
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(user.ToJson()))
@@ -117,14 +120,17 @@ func (h *UserHandlers) Update() http.HandlerFunc {
 		decoder := json.NewDecoder(r.Body)
 		err := decoder.Decode(&user)
 		if err != nil {
+			log.Println("Error decoding user: ", err, "\n", user)
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 		err = h.Service.Update(user)
 		if err != nil {
+			log.Println("Error updating user: ", err, "\n", user)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
+		log.Println("User updated: ", user)
 		w.WriteHeader(http.StatusOK)
 	}
 
@@ -143,15 +149,18 @@ func (h *UserHandlers) Delete() http.HandlerFunc {
 		idStr := r.URL.Query().Get("id")
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
+			log.Println("Error reading id: ", err, "\n", idStr)
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 
 		err = h.Service.Delete(id)
 		if err != nil {
+			log.Println("Error deleting user: ", err, "\n", id)
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
+		log.Println("User deleted: ", id)
 		w.WriteHeader(http.StatusOK)
 	}
 
@@ -172,14 +181,17 @@ func (h *UserHandlers) Create() http.HandlerFunc {
 		decoder := json.NewDecoder(r.Body)
 		err := decoder.Decode(&user)
 		if err != nil {
+			log.Println("Error decoding user: ", err, "\n", user)
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 		err = h.Service.Create(user)
 		if err != nil {
+			log.Println("Error creating user: ", err, "\n", user)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
+		log.Println("User created: ", user)
 		w.WriteHeader(http.StatusOK)
 	}
 
@@ -199,14 +211,17 @@ func (h *UserHandlers) CreateWithInputArray() http.HandlerFunc {
 		decoder := json.NewDecoder(r.Body)
 		err := decoder.Decode(&users)
 		if err != nil {
+			log.Println("Error decoding users: ", err, "\n", users)
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 		_, err = h.Service.CreateWithGivenInputArray(users)
 		if err != nil {
+			log.Println("Error creating users: ", err, "\n", users)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
+		log.Println("Users created: ", users)
 		w.WriteHeader(http.StatusOK)
 	}
 

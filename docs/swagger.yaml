@@ -117,10 +117,10 @@ paths:
       - application/json
       parameters:
       - description: ID
-        in: path
+        in: query
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses: {}
@@ -134,10 +134,10 @@ paths:
       - application/json
       parameters:
       - description: ID
-        in: path
+        in: query
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses: {}
@@ -151,10 +151,10 @@ paths:
       - application/json
       parameters:
       - description: ID
-        in: path
+        in: query
         name: id
         required: true
-        type: integer
+        type: string
       - description: Name
         in: query
         name: name
@@ -234,10 +234,10 @@ paths:
       - application/json
       parameters:
       - description: Order id
-        in: path
+        in: query
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -251,10 +251,10 @@ paths:
       - application/json
       parameters:
       - description: Order id
-        in: path
+        in: query
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
